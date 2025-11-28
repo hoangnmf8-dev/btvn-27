@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="vi">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bài tập về nhà buổi 27</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-okaidia.min.css"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.css"
+    />
+    <link rel="stylesheet" href="./css/reset.css" />
+    <link rel="stylesheet" href="./css/style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <h1 class="container-heading">Bài tập về nhà buổi 27</h1>
+      <section class="code-wrap">
+        <div class="code-wrap-heading">
+          <h2 class="title">Bài 1</h2>
+          <p class="desc">Sử dụng promise all, tính thời gian chạy</p>
+        </div>
+        <pre class="line-numbers">
+          <code class="language-javascript">//Bài 1
+          let startTime;
+          let endTime;
+
+          function fetchUser() {
+            return new Promise((resolve) => {
+              setTimeout(() => resolve("User Data"), 2000);
+            });
+          }
+          function fetchPosts() {
+            return new Promise((resolve) => {
+              setTimeout(() => resolve("Post Data"), 3000);
+            });
+          }
+          function fetchComments() {
+            return new Promise((resolve) => {
+              setTimeout(() => resolve("Comment Data"), 1000);
+            });
+          }
+
+          const arr = [fetchUser(), fetchPosts(), fetchComments()];
+          startTime = new Date();
+
+          Promise.all(arr).then((data) => {
+            console.log("Bài 1: ");
+            //có reject thì gọi thêm catch
+            console.log(data);
+            endTime = new Date();
+            console.log(
+              `Thời gian chạy của các promise là: ${(endTime - startTime) / 1000}s`
+            );
+          });</code>
+        </pre>
+      </section>
+      <section class="code-wrap">
+        <div class="code-wrap-heading">
+          <h2 class="title">Bài 2</h2>
+          <p class="desc">Lấy dữ liệu từ server nhanh nhất.</p>
+        </div>
+        <pre class="line-numbers">
+          <code class="language-javascript">//Bài 2
+          function fetchFromServer1() {
+            return new Promise((resolve) =>
+              setTimeout(() => resolve("Server 1 Response"), 3000)
+            );
+          }
+          function fetchFromServer2() {
+            return new Promise((resolve) =>
+              setTimeout(() => resolve("Server 2 Response"), 2000)
+            );
+          }
+          function fetchFromServer3() {
+            return new Promise((resolve) =>
+              setTimeout(() => resolve("Server 3 Response"), 1000)
+            );
+          }
+          const arr1 = [fetchFromServer1(), fetchFromServer2(), fetchFromServer3()];
+          Promise.race(arr1).then((data) => {
+            console.log("Bài 2:");
+            console.log(data);
+          });</code>
+      </pre>
+      </section>
+      <section class="code-wrap">
+        <div class="code-wrap-heading">
+          <h2 class="title">Bài 3</h2>
+          <p class="desc">Viết một hàm retry(fn, times) thực thi một Promise function fn, nếu thất bại thì thử lại tối đa times lần.</p>
+        </div>
+        <pre class="line-numbers">
+          <code class="language-javascript">//Bài 3
+          function retry(fn, times) {
+            console.log("Bài 3:");
+            return fn()
+              .then((data) => data)
+              .catch((error) => {
+                times--;
+                if (times >= 0) {
+                  //Sau khi thất bại thì được chạy lại tối đa times lần
+                  return retry(fn, times);
+                } else {
+                  return error;
+                }
+              });
+          }
+          let failingPromise = () => {
+            return new Promise((resolve, reject) => {
+              Math.random() > 0.7 ? resolve("Thành công") : reject("Thất bại");
+            });
+          };
+
+          retry(failingPromise, 3)
+            .then((data) => {
+              console.log(data);
+            })
+            .catch((error) => {
+              console.log(error);
+            });</code>
+        </pre>
+      </section>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-javascript.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/line-numbers/prism-line-numbers.min.js"></script>
+    <script src="./main.js"></script>
+  </body>
+</html>
