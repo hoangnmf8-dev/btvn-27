@@ -64,9 +64,9 @@ function retry(fn, times) {
         //Sau khi thất bại thì được chạy lại tối đa times lần
         return retry(fn, times);
       } else {
-        return error;
+        return Promise.reject(error);
       }
-    });
+    }); 
 }
 let failingPromise = () => {
   return new Promise((resolve, reject) => {
